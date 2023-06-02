@@ -27,9 +27,19 @@ nav ul li {
   padding: 1em;
 }
 
+nav a {
+  color: white;
+  text-decoration: none;
+}
+
 button {
   font: inherit;
   cursor: pointer;
+}
+
+/* main */
+main {
+  margin: 0 auto;
 }
 
 /* form */
