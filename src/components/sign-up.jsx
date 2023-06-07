@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom";
 
-export default function Signup() {
+export default function Signup({ isAuthenticated }) {
     // form inputs
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -63,11 +63,22 @@ export default function Signup() {
         }
     }
 
-    if (adminCreated) {
+    // rendering
+    if (isAuthenticated) {
+        return (
+            <>
+                <h2>Already logged in!</h2>
+            </>
+        )
+    }
+
+    else if (adminCreated) {
         return (
             <AdminCreated />
         )
-    } else {
+    }
+
+    else {
         return (
             <>
                 <h2>Sign up form</h2>
@@ -105,7 +116,7 @@ export default function Signup() {
             </>
         )
     }
-}
+};
 
 // successfully created admin component
 function AdminCreated() {
@@ -115,4 +126,4 @@ function AdminCreated() {
             <Link to='/login'>login</Link>
         </>
     )
-}
+};
