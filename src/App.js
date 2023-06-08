@@ -9,6 +9,7 @@ import Signup from './components/sign-up';
 import Login from './components/login';
 import Posts from './components/posts';
 import NewPost from './components/newPost';
+import EditPost from './components/editPost';
 
 function App() {
   // logged in state*
@@ -20,7 +21,7 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Header isAuthenticated={isAuthenticated} />
       <main>
         <Routes>
           <Route path='/' element={<Home isAuthenticated={isAuthenticated} />} />
@@ -29,7 +30,7 @@ function App() {
           <Route path='/posts' >
             <Route index element={<Posts isAuthenticated={isAuthenticated} />} />
             <Route path='new' element={<NewPost isAuthenticated={isAuthenticated} />} />
-            <Route path=':id' element={<Error />} />
+            <Route path=':id' element={<EditPost isAuthenticated={isAuthenticated} />} />
           </Route>
 
           <Route path='*' element={<Error />} />
