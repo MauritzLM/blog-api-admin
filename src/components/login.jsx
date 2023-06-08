@@ -1,8 +1,6 @@
 import { useState } from "react"
 
 export default function Login({ isAuthenticated, handleAuthenticated }) {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
 
     // errors
     const [loginStatus, setLoginStatus] = useState('');
@@ -52,13 +50,13 @@ export default function Login({ isAuthenticated, handleAuthenticated }) {
                 <form method="post" onSubmit={(e) => handleLogin(e)} noValidate>
                     <div>
                         <label htmlFor="username">username
-                            <input type="text" name="username" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required></input>
+                            <input type="text" name="username" id="username" required></input>
                         </label>
                     </div>
 
                     <div>
                         <label htmlFor="password">password
-                            <input type="password" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required></input>
+                            <input type="password" name="password" id="password" required></input>
                         </label>
 
                     </div>
@@ -69,4 +67,4 @@ export default function Login({ isAuthenticated, handleAuthenticated }) {
             </>
         )
     }
-}
+};

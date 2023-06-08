@@ -8,6 +8,7 @@ export default function Signup({ isAuthenticated }) {
     const [email, setEmail] = useState('');
     const [adminCode, setAdminCode] = useState('');
 
+
     // error messages
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
