@@ -16,6 +16,7 @@ export default function Login({ isAuthenticated, handleAuthenticated }) {
         try {
             const response = await fetch('http://localhost:3001/admin/login', {
                 method: form.method,
+                credentials: 'include',
                 body: formData,
             });
 

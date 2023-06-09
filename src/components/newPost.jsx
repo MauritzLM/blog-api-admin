@@ -74,7 +74,7 @@ export default function NewPost({ isAuthenticated }) {
             <>
                 <h2>New blog post</h2>
 
-                <form onSubmit={(e) => { handleNewPost(e) }} method="post">
+                <form onSubmit={(e) => handleNewPost(e)} method="post">
                     <label htmlFor="title">Title
                         <input type="text" name="title" id="title" />
                         <span>{titleError}</span>
@@ -89,6 +89,8 @@ export default function NewPost({ isAuthenticated }) {
                         <textarea name="postContent" id="postContent" cols="30" rows="10" />
                         <span>{contentError}</span>
                     </label>
+
+                    {/* add publish checkbox */}
 
                     <button type="submit">submit</button>
                 </form>
