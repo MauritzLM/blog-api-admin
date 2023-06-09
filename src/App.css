@@ -66,3 +66,8 @@ form button {
   width: 90%;
   padding: .5em 1em;
 }
+
+form .text-area-edit {
+  height: 400px;
+  width: 700px;
+}
