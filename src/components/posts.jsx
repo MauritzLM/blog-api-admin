@@ -8,7 +8,10 @@ export default function Posts({ isAuthenticated }) {
     // fetch all posts function and update state
     async function getPosts() {
         try {
-            const response = await fetch('http://localhost:3001/admin/posts', { method: 'GET', credentials: 'include' });
+            const response = await fetch('http://localhost:3001/admin/posts', {
+                method: 'GET',
+                credentials: 'include'
+            });
 
             const allPosts = await response.json();
 
@@ -26,9 +29,10 @@ export default function Posts({ isAuthenticated }) {
 
     // render list of posts
     const postsDisplay = posts.map(post => {
-        return <div key={post.id}>
-            <p >{post.title} by {post.author} posted on {post.date}</p>
-        </div>
+        return <li key={post._id}>
+            <Link to={`/posts/${post._id}`}>{post.title}</Link> <span>({post.published ? 'published' : 'not published'})</span>
+            <p >by {post.author} posted on {post.date}</p>
+        </li>
     });
 
     // logged in?
@@ -39,7 +43,7 @@ export default function Posts({ isAuthenticated }) {
                 <h2>Posts</h2>
                 <Link to='/posts/new'>New post</Link>
                 <h3>Edit post:</h3>
-                <div>{postsDisplay}</div>
+                <ol>{postsDisplay}</ol>
             </>
         )
     } else {
