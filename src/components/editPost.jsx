@@ -1,11 +1,21 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function EditPost({ isAuthenticated }) {
     // get post id from params
     const { id } = useParams();
 
-    const [post, setPost] = useState({});
+    // set initial state of inputs
+    const [post, setPost] = useState({ title: '', author: '', body: '', published: '' });
+
+    // add post updated state
+    const [postUpdated, setPostUpdated] = useState(false);
+
+    // validation errors
+    const [titleError, setTitleError] = useState('');
+    const [authorError, setAuthorError] = useState('');
+    const [contentError, setContentError] = useState('');
 
 
     // make fetch request to get post
@@ -29,12 +39,12 @@ export default function EditPost({ isAuthenticated }) {
         }
     };
 
-    // run function 
+    // run get post function
     useEffect(() => {
         getPost();
     }, []);
 
-    // implement function to update post*
+    // implement function to update post
     async function handlePostUpdate(event) {
         event.preventDefault();
 
@@ -52,14 +62,24 @@ export default function EditPost({ isAuthenticated }) {
 
             const data = await response.json();
 
-            // if validation errors*
+            // if validation errors
             if (data.errors) {
                 data.errors.forEach(err => {
-                    console.log(err.msg);
+                    if (err.path === 'title') {
+                        setTitleError(err.msg);
+                    }
+                    if (err.path === 'author') {
+                        setAuthorError(err.msg);
+                    }
+                    if (err.path === 'postContent') {
+                        setContentError(err.msg);
+                    }
                 });
+                return;
             };
 
-            // if updated successfully*
+            // if updated successfully
+            setPostUpdated(true);
 
         }
         catch (error) {
@@ -67,30 +87,46 @@ export default function EditPost({ isAuthenticated }) {
         }
     }
 
-    if (isAuthenticated) {
+    // add view comments page link*
+
+    if (postUpdated && isAuthenticated) {
         return (
             <>
-                <h2>Page to edit or delete post {id}</h2>
+                <h2>Post updated</h2>
+                <Link to='/posts'>Back to posts</Link>
+            </>
+        )
+    }
+
+    else if (isAuthenticated) {
+        return (
+            <>
+                <h2>Editing {post.title} by {post.author}</h2>
 
                 <form onSubmit={(e) => handlePostUpdate(e)} method="post">
                     <label htmlFor="title">
-                        <input type="text" name="title" id="title" value={post.title} />
+                        <input type="text" name="title" id="title" value={post.title} onChange={(e) => setPost({ ...post, title: e.target.value })} />
+                        <span>{!post.title ? titleError : ''}</span>
                     </label>
 
                     <label htmlFor="author">
-                        <input type="text" name="author" id="author" value={post.author} />
+                        <input type="text" name="author" id="author" value={post.author} onChange={(e) => setPost({ ...post, author: e.target.value })} />
+                        <span>{!post.author ? authorError : ''}</span>
                     </label>
 
                     <label htmlFor="postContent">
-                        <textarea className="text-area-edit" name="postContent" id="postContent" value={post.body} />
+                        <textarea className="text-area-edit" name="postContent" id="postContent" value={post.body} onChange={(e) => setPost({ ...post, body: e.target.value })} />
+                        <span>{!post.body ? contentError : ''}</span>
                     </label>
 
-                    <label htmlFor="publish">publish
-                        <input type="checkbox" name="publish" id="publish" />
+                    <label htmlFor="publish">publish post
+                        <input type="checkbox" name="publish" id="publish" checked={post.published} onChange={(e) => setPost({ ...post, published: post.published ? false : true })} />
                     </label>
 
                     <button type="submit">Update post</button>
                 </form>
+
+                <Link to={`/posts/${id}/comments`}>View comments</Link>
             </>
         )
     }
