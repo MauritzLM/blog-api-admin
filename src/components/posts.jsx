@@ -32,6 +32,7 @@ export default function Posts({ isAuthenticated }) {
         return <li key={post._id}>
             <Link to={`/posts/${post._id}`}>{post.title}</Link> <span>({post.published ? 'published' : 'not published'})</span>
             <p >by {post.author} posted on {post.date}</p>
+            <Link className="remove-post" to={`/posts/${post._id}/delete`}>Remove post</Link>
         </li>
     });
 
