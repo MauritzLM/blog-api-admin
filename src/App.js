@@ -10,6 +10,7 @@ import Login from './components/login';
 import Posts from './components/posts';
 import NewPost from './components/newPost';
 import EditPost from './components/editPost';
+import Comments from './components/postComments';
 
 function App() {
   // logged in state*
@@ -31,6 +32,7 @@ function App() {
             <Route index element={<Posts isAuthenticated={isAuthenticated} />} />
             <Route path='new' element={<NewPost isAuthenticated={isAuthenticated} />} />
             <Route path=':id' element={<EditPost isAuthenticated={isAuthenticated} />} />
+            <Route path=':id/comments' element={<Comments isAuthenticated={isAuthenticated} />} />
           </Route>
 
           <Route path='*' element={<Error />} />
