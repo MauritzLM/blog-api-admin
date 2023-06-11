@@ -28,7 +28,6 @@ export default function Login({ isAuthenticated, handleAuthenticated }) {
             if (data.authenticated) {
                 handleAuthenticated();
 
-                // redirect to homepage*
                 return;
             }
         }
