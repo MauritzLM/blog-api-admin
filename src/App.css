@@ -57,6 +57,18 @@ ol li {
   color: rgb(175, 65, 65);
 }
 
+/* comments */
+.comment-container {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+  padding: .5em;
+}
+
+.comment-card {
+  padding: 1em;
+  border: 1px solid;
+}
 
 /* form */
 form {
