@@ -63,8 +63,10 @@ export default function NewPost({ isAuthenticated }) {
         return (
             <>
                 <h2>Post created</h2>
-                <button onClick={() => handlePostCreatedChange()}>Create another post</button>
-                <Link to="/posts">back to posts</Link>
+                <div className="post-created-options">
+                    <button onClick={() => handlePostCreatedChange()}>Create another post</button>
+                    <Link to="/posts">back to posts</Link>
+                </div>
             </>
         )
     }
