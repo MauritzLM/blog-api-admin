@@ -78,6 +78,12 @@ form {
   gap: 1em;
 }
 
+input,
+textarea {
+  font: inherit;
+  padding: .5em;
+}
+
 form label {
   display: flex;
   flex-direction: column;
