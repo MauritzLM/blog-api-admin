@@ -1,15 +1,23 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-export default function EditComment() {
+export default function EditComment({ isAuthenticated }) {
+    // get comment id and post id from params
     const { commentid, id } = useParams();
 
-    // comment object
+    // comment updated state
+    const [commentUpdated, setCommentUpdated] = useState(false);
+    //  comment removed state
+    const [commentRemoved, setCommentRemoved] = useState(false)
+
+    // comment object state
     const [commentFormValues, setCommentFormValues] = useState({ author: '', body: '' });
 
-    // form errors
+    // form errors state
     const [commentAuthorError, setCommentAuthorError] = useState('');
     const [commentBodyError, setCommentBodyError] = useState('');
+
+    const [commentRemoveError, setCommentRemoveError] = useState('');
 
 
     // fetch post and update state
@@ -28,6 +36,7 @@ export default function EditComment() {
 
             const commentObj = commentsArr.find(element => element._id === commentid);
 
+            // set state
             setCommentFormValues({ ...commentObj });
 
         }
@@ -41,7 +50,7 @@ export default function EditComment() {
         event.preventDefault();
 
         try {
-            // fetch post
+            // get form data
             const form = event.target;
             const formData = new FormData(form);
 
@@ -66,25 +75,82 @@ export default function EditComment() {
                 });
                 return;
             };
+
+            setCommentUpdated(true);
         }
         catch (error) {
             console.log(error);
         }
     };
 
+    // handle remove comment submit* 
+    async function handleRemoveComment(event) {
+        try {
+            event.preventDefault();
+            // get form data
+            const form = event.target;
+            const formData = new FormData(form);
+
+            // send fetch request
+            // fetch request with credentials
+            const response = await fetch(`http://localhost:3001/admin/posts/${id}/comments/${commentid}/delete`, {
+                method: form.method,
+                credentials: "include",
+                body: formData,
+            });
+
+            const data = await response.json();
+            // validation errors
+            if (data.errors) {
+                setCommentRemoveError(data.errors.msg);
+                return
+            };
+
+            // update state if successful
+            setCommentRemoved(true);
+
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
+    // get comment on page load
     useEffect(() => {
         getComment();
     }, []);
 
-    return (
+
+    if (commentRemoved && isAuthenticated) {
+        return (
+            <>
+                <h2>Comment removed</h2>
+                <Link to={`/posts/${id}/comments`}>back to comments</Link>
+            </>
+        )
+    } else if (commentUpdated && isAuthenticated) {
+        return (
+            <>
+                <h2>Comment updated</h2>
+                <Link to={`/posts/${id}/comments`}>back to comments</Link>
+            </>
+        )
+    } else if (isAuthenticated) {
+        return (
+            <>
+                <h2>Page to edit comment {commentid}</h2>
+                <EditCommentForm handleUpdateComment={handleUpdateComment} commentFormValues={commentFormValues} setCommentFormValues={setCommentFormValues} commentAuthorError={commentAuthorError} commentBodyError={commentBodyError} />
+                <RemoveCommentForm handleRemoveComment={handleRemoveComment} commentRemoveError={commentRemoveError} setCommentRemoveError={setCommentRemoveError} />
+            </>
+        )
+    } else {
         <>
-            <h2>Page to edit comment {commentid}</h2>
-            <EditCommentForm handleUpdateComment={handleUpdateComment} commentFormValues={commentFormValues} setCommentFormValues={setCommentFormValues} commentAuthorError={commentAuthorError} commentBodyError={commentBodyError} />
+            <h2>Unauthorized</h2>
         </>
-    )
+    }
 };
 
-// comment edit form*
+// comment edit form
 function EditCommentForm({ handleUpdateComment, commentFormValues, setCommentFormValues, commentAuthorError, commentBodyError }) {
     return (
         <>
@@ -100,6 +166,21 @@ function EditCommentForm({ handleUpdateComment, commentFormValues, setCommentFor
                 </label>
 
                 <button type="submit">Update comment</button>
+            </form>
+        </>
+    )
+};
+
+// remove comment form*
+function RemoveCommentForm({ handleRemoveComment, commentRemoveError, setCommentRemoveError }) {
+    return (
+        <>
+            <form onSubmit={(e) => handleRemoveComment(e)} method="post">
+                <label htmlFor="admincode">enter admin code
+                    <input type="password" name="admincode"></input>
+                    <span>{commentRemoveError}</span>
+                </label>
+                <button type="submit">Remove comment</button>
             </form>
         </>
     )
