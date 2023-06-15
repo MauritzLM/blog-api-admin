@@ -21,7 +21,7 @@ export default function Comments({ isAuthenticated }) {
     const [commentBodyError, setCommentBodyError] = useState('');
 
 
-    // fetch post
+    // fetch post and set state
     async function getComments() {
 
         try {
@@ -45,7 +45,7 @@ export default function Comments({ isAuthenticated }) {
         }
     };
 
-    // create new comment function*
+    // create new comment function
     async function handleCommentCreate(event) {
 
         event.preventDefault();
@@ -104,7 +104,7 @@ export default function Comments({ isAuthenticated }) {
     }, []);
 
 
-    // create list of comments
+    // display all comments and new comment form
     if (isAuthenticated) {
         return (
             <>
@@ -123,7 +123,7 @@ export default function Comments({ isAuthenticated }) {
 };
 
 
-// create comment form
+// create new comment form
 function CreateCommentForm({ handleCommentCreate, commentFormValues, setCommentFormValues, commentAuthorError, commentBodyError }) {
 
     return (
