@@ -9,13 +9,20 @@ export default function EditPost({ isAuthenticated }) {
     // set initial state of inputs
     const [post, setPost] = useState({ title: '', author: '', body: '', published: '' });
 
-    // add post updated state
+    // post updated state
     const [postUpdated, setPostUpdated] = useState(false);
 
+    // post removed state
+    const [postRemoved, setPostRemoved] = useState(false);
+
     // validation errors
+    // update form
     const [titleError, setTitleError] = useState('');
     const [authorError, setAuthorError] = useState('');
     const [contentError, setContentError] = useState('');
+
+    // remove form
+    const [removePostError, setRemovePostError] = useState('');
 
 
     // make fetch request to get post
@@ -44,7 +51,7 @@ export default function EditPost({ isAuthenticated }) {
         getPost();
     }, []);
 
-    // implement function to update post
+    //  function to handle post update
     async function handlePostUpdate(event) {
         event.preventDefault();
 
@@ -87,7 +94,37 @@ export default function EditPost({ isAuthenticated }) {
         }
     }
 
-    // add view comments page link*
+    // function to handle removing post
+    async function handlePostRemove(event) {
+        event.preventDefault();
+        try {
+            // get form data
+            const form = event.target;
+            const formData = new FormData(form);
+
+            // post request
+            const response = await fetch(`http://localhost:3001/admin/posts/${id}/delete`, {
+                method: form.method,
+                credentials: "include",
+                body: formData,
+            });
+
+            const data = await response.json();
+
+            // validation errors
+            if (data.errors) {
+                setRemovePostError(data.errors[0].msg)
+                return;
+            }
+
+            // success - change state
+            setPostRemoved(true);
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
 
     if (postUpdated && isAuthenticated) {
         return (
@@ -96,14 +133,21 @@ export default function EditPost({ isAuthenticated }) {
                 <Link to='/posts'>Back to posts</Link>
             </>
         )
-    }
-
-    else if (isAuthenticated) {
+    } else if (postRemoved && isAuthenticated) {
+        return (
+            <>
+                <h2>Post removed</h2>
+                <Link to='/posts'>Back to posts</Link>
+            </>
+        )
+    } else if (isAuthenticated) {
         return (
             <>
                 <h2>Editing {post.title} by {post.author}</h2>
 
-                <form onSubmit={(e) => handlePostUpdate(e)} method="post">
+                {/* update post form*/}
+                <form onSubmit={(e) => handlePostUpdate(e)} method="post" className="update-post-form">
+
                     <label htmlFor="title">
                         <input type="text" name="title" id="title" value={post.title} onChange={(e) => setPost({ ...post, title: e.target.value })} />
                         <span>{!post.title ? titleError : ''}</span>
@@ -124,9 +168,28 @@ export default function EditPost({ isAuthenticated }) {
                     </label>
 
                     <button type="submit">Update post</button>
+
                 </form>
 
                 <Link to={`/posts/${id}/comments`}>View comments</Link>
+
+                {/* remove post form */}
+                <form onSubmit={(e) => handlePostRemove(e)} method="post" className="remove-post-form">
+
+                    <label htmlFor="admincode">admin code
+                        <input type="password" name="admincode"></input>
+                        <span>{removePostError}</span>
+                    </label>
+
+                    <button type="submit">Remove post</button>
+
+                </form>
+            </>
+        )
+    } else {
+        return (
+            <>
+                <h2>Unauthorized</h2>
             </>
         )
     }
