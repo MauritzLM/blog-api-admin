@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import { useEffect } from "react";
 import { useState } from "react";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 export default function Posts({ isAuthenticated }) {
     const [posts, setPosts] = useState([]);
@@ -33,7 +33,6 @@ export default function Posts({ isAuthenticated }) {
         return <li key={post._id}>
             <Link to={`/posts/${post._id}`}>{post.title}</Link> <span>({post.published ? 'published' : 'not published'})</span>
             <p >by {post.author} posted on {dayjs(post.date).format("D MMM YYYY")}</p>
-            <Link className="remove-post" to={`/posts/${post._id}/delete`}>Remove post</Link>
         </li>
     });
 
