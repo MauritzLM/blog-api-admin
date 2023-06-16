@@ -85,8 +85,9 @@ export default function EditComment({ isAuthenticated }) {
 
     // handle remove comment submit* 
     async function handleRemoveComment(event) {
+        event.preventDefault();
         try {
-            event.preventDefault();
+
             // get form data
             const form = event.target;
             const formData = new FormData(form);
@@ -102,7 +103,7 @@ export default function EditComment({ isAuthenticated }) {
             const data = await response.json();
             // validation errors
             if (data.errors) {
-                setCommentRemoveError(data.errors.msg);
+                setCommentRemoveError(data.errors[0].msg);
                 return
             };
 
@@ -140,7 +141,7 @@ export default function EditComment({ isAuthenticated }) {
             <>
                 <h2>Page to edit comment {commentid}</h2>
                 <EditCommentForm handleUpdateComment={handleUpdateComment} commentFormValues={commentFormValues} setCommentFormValues={setCommentFormValues} commentAuthorError={commentAuthorError} commentBodyError={commentBodyError} />
-                <RemoveCommentForm handleRemoveComment={handleRemoveComment} commentRemoveError={commentRemoveError} setCommentRemoveError={setCommentRemoveError} />
+                <RemoveCommentForm handleRemoveComment={handleRemoveComment} commentRemoveError={commentRemoveError} />
             </>
         )
     } else {
@@ -171,8 +172,8 @@ function EditCommentForm({ handleUpdateComment, commentFormValues, setCommentFor
     )
 };
 
-// remove comment form*
-function RemoveCommentForm({ handleRemoveComment, commentRemoveError, setCommentRemoveError }) {
+// remove comment form
+function RemoveCommentForm({ handleRemoveComment, commentRemoveError }) {
     return (
         <>
             <form onSubmit={(e) => handleRemoveComment(e)} method="post">
