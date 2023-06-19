@@ -31,22 +31,23 @@ describe("input values and validation", () => {
         // const user = userEvent.setup();
 
         render(<Signup isAuthenticated={isAuthenticated} />);
-        await act(async () => {
-            const nameInput = screen.getByTestId("username");
-            const passwrdInput = screen.getByTestId("password");
-            const emailInput = screen.getByTestId("email");
-            const codeInput = screen.getByTestId("code");
 
-            fireEvent.change(nameInput, { target: { value: "Bob" } });
-            fireEvent.change(passwrdInput, { target: { value: "secret123" } });
-            fireEvent.change(emailInput, { target: { value: "bob@gooogle" } });
-            fireEvent.change(codeInput, { target: { value: "789" } });
-        });
+        const nameInput = screen.getByTestId("username");
+        const passwrdInput = screen.getByTestId("password");
+        const emailInput = screen.getByTestId("email");
+        const codeInput = screen.getByTestId("code");
 
-        expect(screen.getByTestId("username")).toHaveValue("Bob");
-        expect(screen.getByTestId("password")).toHaveValue("secret123");
-        expect(screen.getByTestId("email")).toHaveValue("bob@gooogle");
-        expect(screen.getByTestId("code")).toHaveValue("789");
+
+        fireEvent.change(nameInput, { target: { value: "Bob" } });
+        fireEvent.change(passwrdInput, { target: { value: "secret123" } });
+        fireEvent.change(emailInput, { target: { value: "bob@gooogle" } });
+        fireEvent.change(codeInput, { target: { value: "789" } });
+
+
+        expect(nameInput).toHaveValue("Bob");
+        expect(passwrdInput).toHaveValue("secret123");
+        expect(emailInput).toHaveValue("bob@gooogle");
+        expect(codeInput).toHaveValue("789");
 
     });
 
