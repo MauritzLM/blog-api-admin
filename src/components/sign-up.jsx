@@ -19,7 +19,6 @@ export default function Signup({ isAuthenticated }) {
     const emailRegex = new RegExp(/^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm");
 
     const [adminCreated, setAdminCreated] = useState(false);
-    // user already logged in?*
 
     // handle form submit
     async function handleSubmit(event) {
@@ -55,7 +54,7 @@ export default function Signup({ isAuthenticated }) {
 
                 });
             } else {
-                // display result* (change state if succesful / admin created, link to login page)
+                // update state
                 setAdminCreated(true);
             }
         }
@@ -86,33 +85,33 @@ export default function Signup({ isAuthenticated }) {
                 <form method="post" action="http://localhost:3001/admin/signup" onSubmit={(e) => handleSubmit(e)} noValidate>
                     <div>
                         <label htmlFor="username">username
-                            <input type="text" name="username" id="username" value={username} onChange={(e) => { setUsername(e.target.value) }} required></input>
+                            <input type="text" name="username" id="username" value={username} onChange={(e) => { setUsername(e.target.value) }} required data-testid="username"></input>
                             <span className="error">{username === '' ? usernameError : ''}</span>
                         </label>
                     </div>
 
                     <div>
                         <label htmlFor="password">password
-                            <input type="password" name="password" id="password" value={password} onChange={(e) => { setPassword(e.target.value) }} required></input>
+                            <input type="password" name="password" id="password" value={password} onChange={(e) => { setPassword(e.target.value) }} required data-testid="password"></input>
                             <span className="error">{password === '' || password.length < 8 ? passwordError : ''}</span>
                         </label>
                     </div>
 
                     <div>
                         <label htmlFor="email">email
-                            <input type="email" name="email" id="email" value={email} onChange={(e) => { setEmail(e.target.value) }} required></input>
+                            <input type="email" name="email" id="email" value={email} onChange={(e) => { setEmail(e.target.value) }} required data-testid="email"></input>
                             <span className="error">{emailRegex.test(email) ? '' : emailError}</span>
                         </label>
                     </div>
 
                     <div>
                         <label htmlFor="admincode">enter admin code
-                            <input type="password" name="admincode" id="admincode" value={adminCode} onChange={(e) => { setAdminCode(e.target.value) }} required></input>
+                            <input type="password" name="admincode" id="admincode" value={adminCode} onChange={(e) => { setAdminCode(e.target.value) }} required data-testid="code"></input>
                             <span className="error">{adminCodeError}</span>
                         </label>
                     </div>
 
-                    <button type="submit" >Sign up</button>
+                    <button type="submit" data-testid="submit-btn">Sign up</button>
                 </form>
             </>
         )
