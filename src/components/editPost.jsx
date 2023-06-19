@@ -163,7 +163,7 @@ export default function EditPost({ isAuthenticated }) {
                         <span>{!post.body ? contentError : ''}</span>
                     </label>
 
-                    <label htmlFor="publish">publish post
+                    <label htmlFor="publish" className="publish-label">publish post
                         <input type="checkbox" name="publish" id="publish" checked={post.published} onChange={(e) => setPost({ ...post, published: post.published ? false : true })} />
                     </label>
 
